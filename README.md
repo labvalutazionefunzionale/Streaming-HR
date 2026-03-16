@@ -3,7 +3,7 @@
 ![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
 
-Questa applicazione web consente il monitoraggio in tempo reale della **Frequenza Cardiaca (HR)** e della **Variabilità Cardiaca (HRV)** utilizzando i dati provenienti da sensori **Moofit** tramite l'ecosistema **Pulsoid** e web app customizzata **Streamlit** 
+Questa applicazione web consente il monitoraggio in tempo reale della **Frequenza cardiaca (HR)** e della **Variabilità della frequenza cardiaca (HRV)** utilizzando i dati provenienti da sensori **Moofit** tramite l'ecosistema **Pulsoid** e web app customizzata **Streamlit** 
 
 ---
 
@@ -36,7 +36,7 @@ L'app è sviluppata in **Python** e richiede le seguenti librerie (incluse in `r
 * `pandas` & `numpy`: Elaborazione dati e calcoli statistici
 * `altair`: Visualizzazione dati
 * `streamlit-autorefresh`: Gestione del refresh dinamico
-* * `pytz`: Gestione dei fusi orari
+* `pytz`: Gestione dei fusi orari
 
 ---
 
@@ -65,8 +65,8 @@ Sia il sensore che la metodica di acquisizione dati non permettono di utilizzare
 ## 🎓 Crediti
 **Sviluppato da:** Danilo Bondi  
 **Affiliazioni:**
-* Università degli Studi "G. d'Annunzio" Chieti-Pescara (**UDA**)
-* Università degli Studi dell'Aquila (**UnivAq**)
+* Università degli Studi "G. d'Annunzio" Chieti-Pescara
+* Università degli Studi dell'Aquila
 
 **AI Support:** Progettato con l'ausilio di Gemini (Google AI).
 
