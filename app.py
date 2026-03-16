@@ -4,61 +4,75 @@ import pandas as pd
 import time
 from datetime import datetime
 
-PULSEOID_TOKEN = "6f519fde-0ec2-4bc1-a108-8812f6f0c102"
+# --- CONFIGURAZIONE ---
+PULSOID_TOKEN = "6f519fde-0ec2-4bc1-a108-8812f6f0c102"
 
 st.set_page_config(page_title="Moofit Live Remote", layout="wide")
 
 st.title("💓 Monitoraggio Cardiaco Moofit (Live)")
 
+# Inizializzazione dati nella sessione
 if 'history' not in st.session_state:
     st.session_state.history = pd.DataFrame(columns=['Orario', 'BPM'])
 
 def get_bpm():
-    url = f"https://pulseoid.net/v1/api/get_actual_heart_rate?access_token={PULSEOID_TOKEN}"
+    # Nuovo endpoint ufficiale dalla documentazione
+    url = "https://dev.pulsoid.net/api/v1/data/heart_rate/latest"
+    
+    # L'autenticazione ora va negli headers
+    headers = {
+        "Authorization": f"Bearer {PULSOID_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
     try:
-        r = requests.get(url)
+        r = requests.get(url, headers=headers, timeout=5)
         if r.status_code == 200:
-            data = r.json()
-            # Pulseoid restituisce il battito o None se il sensore è offline
-            return data.get('heart_rate')
+            json_data = r.json()
+            # La nuova struttura è: {"data": {"heart_rate": 80}, ...}
+            return json_data.get('data', {}).get('heart_rate')
+        elif r.status_code == 403:
+            return "Errore: Token non valido (403)"
+        elif r.status_code == 412:
+            return "In attesa di dati... (Assicurati che l'app sia LIVE)"
         else:
             return f"Errore API: {r.status_code}"
     except Exception as e:
         return f"Errore Connessione: {e}"
 
+# --- INTERFACCIA ---
 col1, col2 = st.columns([1, 3])
 
 with col1:
-    st.subheader("Stato Sensore")
+    st.subheader("Stato Real-time")
     metric_place = st.empty()
     status_place = st.empty()
     st.write("---")
     if len(st.session_state.history) > 0:
         csv = st.session_state.history.to_csv(index=False).encode('utf-8')
-        st.download_button("📥 Scarica dati CSV", data=csv, file_name="sessione_moofit.csv", mime='text/csv')
+        st.download_button("📥 Scarica CSV Sessione", data=csv, file_name="sessione_moofit.csv", mime='text/csv')
 
 with col2:
     chart_place = st.empty()
 
+# --- LOOP DI AGGIORNAMENTO ---
 while True:
     val = get_bpm()
     
-    # Se il valore è un numero (battito ricevuto)
-    if isinstance(val, int) and val > 0:
+    if isinstance(val, int):
         status_place.success("Segnale Ricevuto ✅")
         now = datetime.now().strftime("%H:%M:%S")
+        
+        # Aggiungi dato alla cronologia
         new_data = pd.DataFrame({'Orario': [now], 'BPM': [val]})
         st.session_state.history = pd.concat([st.session_state.history, new_data], ignore_index=True)
         
+        # Aggiorna visualizzazione
         metric_place.metric("Battito Attuale", f"{val} BPM")
+        # Mostra gli ultimi 100 secondi di grafico
         chart_place.line_chart(st.session_state.history.set_index('Orario').tail(100))
-    
-    # Se il valore è None o un messaggio d'errore
     else:
         metric_place.metric("Battito Attuale", "--")
-        if val is None:
-            status_place.warning("Sensore Offline ⚠️ (Assicurati che l'app sul telefono sia su LIVE)")
-        else:
-            status_place.error(f"Problema: {val}")
+        status_place.info(f"Stato: {val}")
     
-    time.sleep(1)
+    time.sleep(1) # Pulsoid consiglia di non scendere sotto i 500ms
