@@ -114,8 +114,8 @@ if not st.session_state.history.empty:
     data_subset = st.session_state.history.tail(window_size)
     
     avg_bpm = data_subset['BPM'].mean()
-    y_min = max(30, avg_bpm - 30)
-    y_max = y_min + 60
+    y_min = max(20, avg_bpm - 20)
+    y_max = y_min + 50
 
     line = alt.Chart(data_subset).mark_line(color='#ff4b4b', interpolate='monotone').encode(
         x=alt.X('Secondi:Q',
