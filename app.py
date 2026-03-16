@@ -12,6 +12,16 @@ PULSOID_TOKEN = "6f519fde-0ec2-4bc1-a108-8812f6f0c102"
 
 st.set_page_config(page_title="Moofit HRV Monitor", layout="wide")
 
+# --- LOGHI IN ALTO ---
+col1, col2, col3, col4 = st.columns(4)
+logos = ["images/logo1.png", "images/logo2.png", "images/logo3.png", "images/logo4.png"]
+
+for col, img in zip([col1, col2, col3, col4], logos):
+    with col:
+        st.image(img, width=80, use_column_width=False)
+
+st.markdown("---")
+
 # Refresh automatico ogni 500ms
 st_autorefresh(interval=500, key="hr_update")
 
