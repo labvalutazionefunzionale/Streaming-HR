@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
+import pytz
 
 # --- CONFIGURAZIONE ---
 # Il tuo Token inserito direttamente
@@ -58,6 +59,17 @@ with st.sidebar:
 
 # --- DASHBOARD ---
 st.title("📊 Analisi HRV Moofit")
+
+# --- ITALIAN TIME CLOCK ---
+italy_tz = pytz.timezone('Europe/Rome')
+current_time_italy = datetime.now(italy_tz).strftime("%H:%M:%S")
+current_date_italy = datetime.now(italy_tz).strftime("%d/%m/%Y")
+
+col_clock, col_empty = st.columns([1, 3])
+col_clock.markdown(f"### 🕐 {current_time_italy}")
+col_clock.caption(f"Orario italiano - {current_date_italy}")
+
+st.write("---")
 
 bpm = get_bpm()
 current_ts = datetime.now().strftime("%H:%M:%S")
