@@ -5,19 +5,18 @@ import numpy as np
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import pytz
+import altair as alt
 
 # --- CONFIGURAZIONE ---
-# Il tuo Token inserito direttamente
 PULSOID_TOKEN = "6f519fde-0ec2-4bc1-a108-8812f6f0c102"
 
 st.set_page_config(page_title="Moofit HRV Monitor", layout="wide")
 
-# Refresh automatico ogni 500ms per la massima reattività
+# Refresh automatico ogni 500ms
 st_autorefresh(interval=500, key="hr_update")
 
 # --- INIZIALIZZAZIONE MEMORIA ---
 if 'history' not in st.session_state:
-    # Salviamo Secondi relativi, BPM e Intervalli RR
     st.session_state.history = pd.DataFrame(columns=['Secondi', 'BPM', 'RR_ms'])
 if 'running' not in st.session_state:
     st.session_state.running = False
@@ -37,6 +36,13 @@ def get_bpm():
 
 # --- SIDEBAR ---
 with st.sidebar:
+    # 1) Orologio e data in alto a sinistra nella sidebar
+    italy_tz = pytz.timezone('Europe/Rome')
+    now_italy = datetime.now(italy_tz)
+    st.markdown(f"### 🕐 {now_italy.strftime('%H:%M:%S')}")
+    st.caption(f"📅 {now_italy.strftime('%d/%m/%Y')}")
+    st.write("---")
+    
     st.header("🎮 Controlli Sessione")
     c1, c2 = st.columns(2)
     if c1.button("▶️ START", use_container_width=True, type="primary"):
@@ -56,19 +62,14 @@ with st.sidebar:
             st.session_state.last_timestamp = ""
             st.session_state.running = False
             st.rerun()
+        
+        # 5) Info aggiuntive
+        st.write("---")
+        st.info("**Sensore:** armband Moofit  \n**Smartphone app:** Pulsoid  \n**Repository:** GitHub  \n**Web app:** Streamlit" \n**AI tool for coding:** Google Gemini")
 
 # --- DASHBOARD ---
-st.title("📊 Analisi HRV Moofit")
-
-# --- ITALIAN TIME CLOCK ---
-italy_tz = pytz.timezone('Europe/Rome')
-current_time_italy = datetime.now(italy_tz).strftime("%H:%M:%S")
-current_date_italy = datetime.now(italy_tz).strftime("%d/%m/%Y")
-
-col_clock, col_empty = st.columns([1, 3])
-col_clock.markdown(f"### 🕐 {current_time_italy}")
-col_clock.caption(f"Orario italiano - {current_date_italy}")
-
+# 2) Nuovo titolo con icona cuore
+st.title("📊❤️ Monitoraggio HR e HRV in real time")
 st.write("---")
 
 bpm = get_bpm()
@@ -77,39 +78,40 @@ current_ts = datetime.now().strftime("%H:%M:%S")
 col_val, col_hrv = st.columns(2)
 
 if bpm:
-    # Calcolo istantaneo intervallo R-R: 60000 / BPM
     rr_ms = 60000 / bpm
     col_val.metric("Frequenza Cardiaca", f"{bpm} BPM")
     
     if st.session_state.running:
-        # Registra il dato solo se il secondo è cambiato (1Hz)
         if st.session_state.last_timestamp != current_ts:
-            # Il conteggio dei secondi parte da 0 (lunghezza attuale del dataframe)
             sec_elapsed = len(st.session_state.history)
-            
             new_row = pd.DataFrame([{'Secondi': sec_elapsed, 'BPM': bpm, 'RR_ms': rr_ms}])
             st.session_state.history = pd.concat([st.session_state.history, new_row], ignore_index=True)
             st.session_state.last_timestamp = current_ts
         
-        # --- LOGICA HRV (SDNN su 30 secondi) ---
         if len(st.session_state.history) >= 2:
-            # Calcoliamo la SDNN sugli ultimi 30 record (30 secondi)
             rolling_data = st.session_state.history['RR_ms'].tail(30)
             sdnn = np.std(rolling_data)
             col_hrv.metric("HRV (SDNN 30s)", f"{sdnn:.2f} ms")
-            
-            # Nota: L'HRV si aggiorna ad ogni nuovo dato ricevuto basandosi 
-            # sempre sulla finestra degli ultimi 30 secondi registrati.
         else:
             col_hrv.info("Inizializzazione HRV...")
     else:
         col_hrv.warning("Registrazione in pausa. Clicca START.")
 else:
     col_val.metric("Battito", "--")
-    st.error("⚠️ In attesa di segnale... Verifica che l'app Pulsoid sia aperta sul telefono.")
+    st.error("⚠️ In attesa di segnale...")
 
-# --- GRAFICO ---
+# --- GRAFICO AVANZATO (Altair) ---
 if not st.session_state.history.empty:
-    # Usiamo 'Secondi' come asse X (partendo da 0)
-    chart_data = st.session_state.history.tail(window_size).set_index('Secondi')
-    st.line_chart(chart_data['BPM'])
+    data_subset = st.session_state.history.tail(window_size)
+    
+    # Linea principale BPM
+    line = alt.Chart(data_subset).mark_line(color='#ff4b4b').encode(
+        x=alt.X('Secondi:Q', axis=alt.Axis(grid=True, tickCount=window_size//5, gridDash=[2,2])),
+        y=alt.Y('BPM:Q', scale=alt.Scale(domain=[40, 200]))
+    )
+    
+    # 3) Linea di tendenza (regressione)
+    trend = line.transform_regression('Secondi', 'BPM').mark_line(strokeDash=[5,5], color='white')
+    
+    # Rendering del grafico
+    st.altair_chart(line + trend, use_container_width=True)
