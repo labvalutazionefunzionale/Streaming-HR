@@ -24,10 +24,10 @@ Questa applicazione web consente il monitoraggio in tempo reale della **Frequenz
 ## 🛠️ Requisiti Tecnici
 
 L'app è sviluppata in **Python** e richiede le seguenti librerie (incluse in `requirements.txt`):
-* `streamlit`: Framework per l'interfaccia web.
-* `pandas` & `numpy`: Elaborazione dati e calcoli statistici.
-* `altair`: Visualizzazione dati avanzata.
-* `streamlit-autorefresh`: Gestione del refresh dinamico.
+* `streamlit`: Framework per l'interfaccia web
+* `pandas` & `numpy`: Elaborazione dati e calcoli statistici
+* `altair`: Visualizzazione dati
+* `streamlit-autorefresh`: Gestione del refresh dinamico
 
 ---
 
@@ -37,7 +37,7 @@ L'app è sviluppata in **Python** e richiede le seguenti librerie (incluse in `r
    - Assicurati che il tuo Moofit sia collegato all'app Pulsoid sul telefono.
    - Ottieni il tuo **Access Token** dal sito [Pulsoid.net](https://pulsoid.net).
 2. **Setup dell'App**:
-   - Inserisci il token nel file `app.py`.
+   - Inserisci il token nel file `app.py` (Riga 12, sostituire il token tra virgolette)
    - Carica i file su GitHub e collega il repository a **Streamlit Cloud**.
 3. **Utilizzo**:
    - Clicca **START** per iniziare la registrazione.
