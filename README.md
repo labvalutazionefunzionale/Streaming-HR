@@ -1,3 +1,5 @@
+[🇬🇧 English version available here](README_EN.md)
+
 # 📊 Monitoraggio HR e HRV per scopi didattici 💓
 
 ![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)
