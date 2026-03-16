@@ -23,7 +23,7 @@ Questa applicazione web consente il monitoraggio in tempo reale della **Frequenz
 
 ## 📸 Schermata di Esempio
 
-Di seguito viene mostrata una schermata di esempio dell'interfaccia dell'app durante una registrazione attiva, dopo la fase di calibrazione iniziale di 30 secondi.
+Di seguito viene mostrata una schermata di esempio dell'interfaccia dell'app durante una registrazione attiva, dopo la fase di attesa iniziale di 30 secondi per visualizzare i dati di HRV.
 
 ![Schermata di esempio dell'app Moofit HRV Monitor](screenshot_Streamlit.png)
 
