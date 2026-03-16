@@ -92,20 +92,44 @@ col_val, col_hrv = st.columns(2)
 
 if bpm:
     rr_ms = 60000 / bpm
-    col_val.metric("Heart Rate", f"{bpm} BPM")
-
+    
     if st.session_state.running:
+        # --- MODALITÀ LIVE ---
+        col_val.metric("Heart Rate (Live)", f"{bpm} BPM")
+        
         if st.session_state.last_timestamp != current_ts:
             sec_elapsed = len(st.session_state.history)
             new_row = pd.DataFrame([{'Secondi': sec_elapsed, 'BPM': bpm, 'RR_ms': rr_ms}])
             st.session_state.history = pd.concat([st.session_state.history, new_row], ignore_index=True)
             st.session_state.last_timestamp = current_ts
 
-        if len(st.session_state.history) >= 2:
-            sdnn = np.std(st.session_state.history['RR_ms'].tail(30))
-            col_hrv.metric("HRV (SDNN 30s)", f"{sdnn:.2f} ms")
+        n_punti = len(st.session_state.history)
+        if n_punti >= 30:
+            recent_rr = st.session_state.history['RR_ms'].tail(30).values
+            rmssd_live = np.sqrt(np.mean(np.square(np.diff(recent_rr))))
+            col_hrv.metric("HRV (RMSSD 30s live)", f"{rmssd_live:.2f} ms")
+        else:
+            col_hrv.info(f"⏳ Calibrazione HRV: {30 - n_punti}s...")
+            
     else:
-        col_hrv.warning("In pausa")
+        # --- MODALITÀ STOP (REPORT FINALE) ---
+        if not st.session_state.history.empty:
+            # Calcolo medie globali
+            avg_bpm_total = st.session_state.history['BPM'].mean()
+            
+            # Calcolo RMSSD globale su tutta la registrazione
+            all_rr = st.session_state.history['RR_ms'].values
+            if len(all_rr) >= 2:
+                rmssd_total = np.sqrt(np.mean(np.square(np.diff(all_rr))))
+                
+                col_val.metric("Media BPM Sessione", f"{avg_bpm_total:.1f}")
+                col_hrv.metric("RMSSD Totale Sessione", f"{rmssd_total:.2f} ms")
+                st.success(f"✅ Sessione conclusa. Dati totali: {len(st.session_state.history)} secondi.")
+            else:
+                col_val.warning("Sessione troppo breve per il calcolo.")
+        else:
+            col_val.metric("Heart Rate", f"{bpm} BPM")
+            col_hrv.warning("In pausa - Inizia una registrazione")
 else:
     st.error("⚠️ Segnale assente")
 
