@@ -64,7 +64,8 @@ Sia il sensore che la metodica di acquisizione dati non permettono di utilizzare
 
 ## 🎓 Crediti
 **Sviluppato da:** Danilo Bondi  
-**Affiliazioni:** * Università degli Studi "G. d'Annunzio" Chieti-Pescara (**UDA**)
+**Affiliazioni:**
+* Università degli Studi "G. d'Annunzio" Chieti-Pescara (**UDA**)
 * Università degli Studi dell'Aquila (**UnivAq**)
 
 **AI Support:** Progettato con l'ausilio di Gemini (Google AI).
