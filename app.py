@@ -12,16 +12,6 @@ PULSOID_TOKEN = "6f519fde-0ec2-4bc1-a108-8812f6f0c102"
 
 st.set_page_config(page_title="Moofit HRV Monitor", layout="wide")
 
-# --- LOGHI IN ALTO ---
-col1, col2 = st.columns(2)
-logos = ["logo UDA.png", "Logo UnivAq.png"]
-
-for col, img in zip([col1, col2], logos):
-    with col:
-        st.image(img, width=70)
-
-st.markdown("---")
-
 # Refresh automatico ogni 500ms
 st_autorefresh(interval=500, key="hr_update")
 
@@ -69,6 +59,17 @@ with st.sidebar:
 
     st.markdown("---")
     st.caption("**Sensor:** Moofit armband | **Smartphone app:** Pulsoid | **Repository:** GitHub | **Web app:** Streamlit | **AI:** Gemini")
+    
+    # --- LOGHI E CREATOR NELLA SIDEBAR ---
+    st.write("")
+    logoc1, logoc2 = st.columns(2)
+    # Usiamo lo stesso parametro height per garantire uniformità
+    with logoc1:
+        st.image("logo UDA.png", height=50)
+    with logoc2:
+        st.image("Logo UnivAq.png", height=50)
+    
+    st.caption("**Creator:** Danilo Bondi")
 
 # --- DASHBOARD ---
 st.title("📊❤️ Monitoraggio HR e HRV")
