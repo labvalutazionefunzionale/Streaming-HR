@@ -58,7 +58,7 @@ with st.sidebar:
             st.rerun()
 
     st.markdown("---")
-    st.caption("**Sensor:** Moofit Armband | **App:** Pulsoid | **AI:** Gemini")
+    st.caption("**Sensor:** Moofit armband | **Smartphone app:** Pulsoid | **Repository:** GitHub |**Web app:** Streamlit |**AI:** Gemini")
 
 # --- DASHBOARD ---
 st.title("📊❤️ Monitoraggio HR e HRV")
