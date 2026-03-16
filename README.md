@@ -21,6 +21,14 @@ Questa applicazione web consente il monitoraggio in tempo reale della **Frequenz
 
 ---
 
+## 📸 Schermata di Esempio
+
+Di seguito viene mostrata una schermata di esempio dell'interfaccia dell'app durante una registrazione attiva, dopo la fase di calibrazione iniziale di 30 secondi.
+
+![Schermata di esempio dell'app Moofit HRV Monitor](screenshot_app.png)
+
+---
+
 ## 🛠️ Requisiti Tecnici
 
 L'app è sviluppata in **Python** e richiede le seguenti librerie (incluse in `requirements.txt`):
@@ -28,6 +36,7 @@ L'app è sviluppata in **Python** e richiede le seguenti librerie (incluse in `r
 * `pandas` & `numpy`: Elaborazione dati e calcoli statistici
 * `altair`: Visualizzazione dati
 * `streamlit-autorefresh`: Gestione del refresh dinamico
+* * `pytz`: Gestione dei fusi orari
 
 ---
 
@@ -46,12 +55,10 @@ L'app è sviluppata in **Python** e richiede le seguenti librerie (incluse in `r
 
 ---
 
-## 🔬 Note Metodologiche
+## 🔬 Alert
 
-### RMSSD (Root Mean Square of Successive Differences)
-Il calcolo dell'HRV si basa sulla trasformazione dei BPM in intervalli **R-R (ms)**:
-$$RR_{ms} = \frac{60000}{BPM}$$
-L'RMSSD viene calcolato come la radice quadrata della media dei quadrati delle differenze tra battiti successivi. È la metrica gold-standard per valutare l'attività del sistema nervoso parasimpatico in finestre temporali brevi.
+### Validità dei dati
+Sia il sensore che la metodica di acquisizione dati non permettono di utilizzare questi valori per scopi clinici o di ricerca; la web app è stat creata per soli scopi didattici!
 
 ---
 
