@@ -6,6 +6,7 @@ from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import pytz
 import altair as alt
+import os
 
 # --- CONFIGURAZIONE ---
 PULSOID_TOKEN = "6f519fde-0ec2-4bc1-a108-8812f6f0c102"
@@ -51,7 +52,7 @@ with st.sidebar:
     if not st.session_state.history.empty:
         csv = st.session_state.history.to_csv(index=False).encode('utf-8')
         st.download_button("📥 CSV", data=csv, file_name="hrv_data.csv", use_container_width=True)
-        if st.button("🗑️ Reset", use_container_width=True):
+        if st.button("🗑 Reset", use_container_width=True):
             st.session_state.history = pd.DataFrame(columns=['Secondi', 'BPM', 'RR_ms'])
             st.session_state.last_timestamp = ""
             st.session_state.running = False
@@ -63,11 +64,21 @@ with st.sidebar:
     # --- LOGHI E CREATOR NELLA SIDEBAR ---
     st.write("")
     logoc1, logoc2 = st.columns(2)
-    # Usiamo lo stesso parametro height per garantire uniformità
-    with logoc1:
-        st.image("logo UDA.png", height=50)
-    with logoc2:
-        st.image("Logo UnivAq.png", height=50)
+    
+    # Utilizzo di width al posto di height per maggiore compatibilità
+    try:
+        with logoc1:
+            if os.path.exists("logo UDA.png"):
+                st.image("logo UDA.png", width=100)
+            else:
+                st.error("UDA non trovato")
+        with logoc2:
+            if os.path.exists("Logo UnivAq.png"):
+                st.image("Logo UnivAq.png", width=100)
+            else:
+                st.error("UnivAq non trovato")
+    except Exception as e:
+        st.sidebar.error(f"Errore caricamento loghi: {e}")
     
     st.caption("**Creator:** Danilo Bondi")
 
@@ -102,12 +113,10 @@ else:
 if not st.session_state.history.empty:
     data_subset = st.session_state.history.tail(window_size)
     
-    # Calcolo asse Y adattivo (escursione 60 BPM centrata sulla media)
     avg_bpm = data_subset['BPM'].mean()
     y_min = max(30, avg_bpm - 30)
     y_max = y_min + 60
 
-    # Linea principale (Interattiva)
     line = alt.Chart(data_subset).mark_line(color='#ff4b4b', interpolate='monotone').encode(
         x=alt.X('Secondi:Q',
                 axis=alt.Axis(grid=True, tickCount=window_size//5, gridDash=[4,4]),
@@ -115,7 +124,6 @@ if not st.session_state.history.empty:
         y=alt.Y('BPM:Q', scale=alt.Scale(domain=[y_min, y_max]), title="Battiti per minuto")
     ).interactive()
 
-    # Linea di tendenza (Continua, solida, spessore costante)
     trend = line.transform_regression('Secondi', 'BPM').mark_line(
         color='white', 
         size=2, 
