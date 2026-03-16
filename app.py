@@ -18,7 +18,7 @@ logos = ["logo UDA.png", "Logo UnivAq.png"]
 
 for col, img in zip([col1, col2], logos):
     with col:
-        st.image(img, width=80, use_column_width=False)
+        st.image(img, width=30)
 
 st.markdown("---")
 
