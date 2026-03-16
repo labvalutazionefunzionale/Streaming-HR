@@ -65,7 +65,7 @@ with st.sidebar:
         
         # 5) Info aggiuntive
         st.write("---")
-        st.info("**Sensore:** armband Moofit  \n**Smartphone app:** Pulsoid  \n**Repository:** GitHub  \n**Web app:** Streamlit" \n**AI tool for coding:** Google Gemini")
+        st.info("**Sensore:** armband Moofit  \n**Smartphone app:** Pulsoid  \n**Repository:** GitHub  \n**Web app:** Streamlit \n**AI tool for coding:** Google Gemini")
 
 # --- DASHBOARD ---
 # 2) Nuovo titolo con icona cuore
