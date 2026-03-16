@@ -71,7 +71,7 @@ Sia il sensore che la metodica di acquisizione dati non permettono di utilizzare
 * Università degli Studi "G. d'Annunzio" Chieti-Pescara
 * Università degli Studi dell'Aquila
 
-**AI Support:** Progettato con l'ausilio di Gemini (Google AI).
-
 ![Logo UDA](logo%20UDA.png)
 ![Logo UnivAq](Logo%20UnivAq.png)
+
+**AI Support:** Progettato con l'ausilio di Gemini (Google AI).
