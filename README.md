@@ -63,8 +63,9 @@ Sia il sensore che la metodica di acquisizione dati non permettono di utilizzare
 ---
 
 ## 🎓 Crediti
-**Sviluppato da:** Danilo Bondi  
-**Affiliazioni:**
+**Sviluppato da:** Danilo Bondi 
+**Data di rilascio:** 16 marzo 2026
+**Enti di riferimento:**
 * Università degli Studi "G. d'Annunzio" Chieti-Pescara
 * Università degli Studi dell'Aquila
 
