@@ -3,20 +3,21 @@
 ![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)
 ![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)
 
-Questa applicazione web consente il monitoraggio in tempo reale della **Frequenza Cardiaca (HR)** e della **Variabilità Cardiaca (HRV)** utilizzando i dati provenienti da sensori **Moofit** tramite l'ecosistema **Pulsoid**.
+Questa applicazione web consente il monitoraggio in tempo reale della **Frequenza Cardiaca (HR)** e della **Variabilità Cardiaca (HRV)** utilizzando i dati provenienti da sensori **Moofit** tramite l'ecosistema **Pulsoid** e web app customizzata **Streamlit** 
 
 ---
 
 ## 🚀 Funzionalità principali
 
-- **Streaming in tempo reale**: Connessione diretta con l'API di Pulsoid per dati HR ad alta frequenza (aggiornamento ogni 500ms).
-- **Analisi HRV Avanzata**: 
+- **Streaming in tempo reale**: Connessione diretta con l'API di Pulsoid per dati HR ad alta frequenza
+- **Analisi HRV esemplificativa**: 
   - Calcolo della metrica **RMSSD** (Root Mean Square of Successive Differences).
   - Finestra mobile di **30 secondi** per il monitoraggio live.
   - Report globale (Media BPM e RMSSD totale) al termine della sessione.
-- **Grafica Interattiva**: Visualizzazione dinamica con linea di tendenza tramite libreria *Altair*.
-- **Esportazione Dati**: Download immediato della sessione in formato `.csv` per analisi successive (es. in R o Excel).
-- **Scala Temporale Relativa**: Il grafico mostra il tempo trascorso dall'inizio della registrazione (0, 1, 2... sec).
+- **Report della sessione (Media BPM e RMSSD totale) allo STOP**
+- **Grafica Interattiva**: Visualizzazione dinamica con linea di tendenza tramite libreria *Altair*
+- **Esportazione Dati**: Download immediato della sessione in formato `.csv` per analisi successive
+- **Scala Temporale Relativa**: Il grafico mostra il tempo trascorso dall'inizio della registrazione
 
 ---
 
